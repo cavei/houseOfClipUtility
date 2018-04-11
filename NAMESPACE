@@ -1,0 +1,13 @@
+import("graphite", "ggplot2")
+importFrom("elasticnet", "spca")
+importFrom("FactoMineR","estim_ncp")
+importFrom("qpgraph", "qpIPF")
+importFrom("corpcor","cov.shrink")
+importFrom("stats", "cov", "reorder")
+importFrom("SuperExactTest", "supertest")
+importFrom("RColorBrewer", "brewer.pal")
+importFrom("checkmate", "assertClass")
+importFrom("grDevices", "colorRampPalette")
+importFrom("igraph", "V<-", "V", "make_ego_graph", "ego", "as_ids", "distances")
+
+exportPattern("^[[:alpha:]]+")

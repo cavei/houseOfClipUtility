@@ -1,0 +1,14 @@
+mapPathwaysIDfromGraphite <- function(pathways, pathwayNames=NULL) {
+  assertClass(pathways, "PathwayList")
+  if (is.null(pathwayNames)) {
+    pathwayNames <- names(pathways)
+  }
+  l <- lapply(pathwayNames, function(p) {
+    if (!(p %in% names(pathways))) {
+      warning(paste0("No id found for ", p ))
+      return(NULL)
+    }
+    data.frame(id=pathways[[p]]@id, pname=p, stringsAsFactors = F)
+  })
+  do.call(rbind, l)
+}
