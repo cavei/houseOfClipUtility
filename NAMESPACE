@@ -1,4 +1,5 @@
 import("graphite", "ggplot2")
+importFrom("AnnotationDbi", "select")
 importFrom("elasticnet", "spca")
 importFrom("FactoMineR","estim_ncp")
 importFrom("qpgraph", "qpIPF")
