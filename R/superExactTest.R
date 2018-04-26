@@ -1,5 +1,5 @@
 runSupertest <- function(list, universeSize, thr=0.05) {
-  echo <- "given a list the function produce the intersection amonst all the sets."
+  echo <- "given a list the function produce the intersection amongst all the sets."
   tmp <- lapply(list, function(x) {
     namesAreNULL <- !is.null(names(x))
     stopifnot(namesAreNULL)
@@ -10,6 +10,7 @@ runSupertest <- function(list, universeSize, thr=0.05) {
 
 plotSupertest <- function(mset) {
   assertClass(mset, "msets")
+
   plot(mset, color.on="#409ec3",color.off="white",
        heatmapColor=colorRampPalette(brewer.pal(9,"OrRd"))(100))
 }

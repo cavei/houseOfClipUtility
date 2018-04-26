@@ -1,7 +1,14 @@
-convertIds <- function(from, keytype="ENTREZID", to="SYMBOL", annDB="org.Hs.eg.db") {
+convertIds <- function(from, keytype="ENTREZID", to="SYMBOL", annDB="org.Hs.eg.db", graphiteStyle=FALSE) {
   requireNamespace(annDB, character.only = T)
-  # entrez <- gsub("ENTREZID:", "", from)
-  select(get(annDB), keys=from, columns = to, keytype=keytype)[[to]]
+  if(graphiteStyle) {
+    suff <- paste0(keytype,":")
+    from <- gsub(suff, "", from)
+  }
+  trans <- select(get(annDB), keys=from, columns = to, keytype=keytype)[[to]]
+  if(graphiteStyle) {
+    trans <- paste0(to,":", trans)
+  }
+  trans
 }
 
 reverseDict <- function(dict) {

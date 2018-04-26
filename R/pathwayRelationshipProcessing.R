@@ -27,6 +27,3 @@ id2pathwayName <- function(path2fathers, pathwayDict) {
     unlist(unname(pathwayDict[x]))
   })
 }
-
-
-
