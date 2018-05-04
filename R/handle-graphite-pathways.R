@@ -1,3 +1,16 @@
+#' Map Pathways ID from Graphite
+#'
+#' For internal use only. Retrieve pathway id and names from Pathways object.
+#'
+#' @param pathways a PathwayList object
+#' @param pathwayNames in not NULL, a subset of pathway to extract
+#'
+#' @return a data frame, id and pathway name
+#'
+#' @importFrom checkmate assertClass
+#'
+#' @export
+#'
 mapPathwaysIDfromGraphite <- function(pathways, pathwayNames=NULL) {
   assertClass(pathways, "PathwayList")
   if (is.null(pathwayNames)) {

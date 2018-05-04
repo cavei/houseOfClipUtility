@@ -1,10 +1,37 @@
+#' Estimate Single Covariance Matrix
+#'
+#' For internal use only. Estimate Covariance from one matrix
+#'
+#' @param expr a numeric matrix
+#' @inheritParams estimateCov
+#'
+#' @return a covariance matrix
+#' @importFrom stats cov
+#' @importFrom corpcor cov.shrink
+#' @export
+#'
 estimateExprCov <- function(expr, shrink) {
   if (shrink)
-    unclass(cov.shrink(expr, verbose=FALSE))
+    unclass(corpcor::cov.shrink(expr, verbose=FALSE))
   else
     cov(expr)
 }
 
+#' Estimate Covariance
+#'
+#' For internal use only. Estimate 2 covariance matrixes
+#'
+#' @param exp1 first numeric matrix
+#' @param exp2 second numeric matrix
+#' @param shrink logical wheter to shrink the matrix
+#'
+#' @return a list
+#'   \item{s1}{covariance of exp1}
+#'   \item{s2}{covariance of exp2}
+#'   \item{s}{combined covariance of exp1 and exp2}
+#'
+#' @export
+#'
 estimateCov <- function(exp1, exp2, shrink) {
   ncl1 <- NROW(exp1)
   ncl2 <- NROW(exp2)
