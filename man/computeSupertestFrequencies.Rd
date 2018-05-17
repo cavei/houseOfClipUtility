@@ -4,10 +4,12 @@
 \alias{computeSupertestFrequencies}
 \title{Compute supertest frequences}
 \usage{
-computeSupertestFrequencies(elementsIntersections)
+computeSupertestFrequencies(elementsIntersections, sep = ".")
 }
 \arguments{
 \item{elementsIntersections}{a summary(msets) object}
+
+\item{sep}{the field separator of the class}
 }
 \value{
 a 'data.frame' with the frequences

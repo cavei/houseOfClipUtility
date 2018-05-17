@@ -72,12 +72,13 @@ createSignificanceMask <- function(list, thr=0.05) {
 #' For internal use only. Compute supertest frequences
 #'
 #' @param elementsIntersections a summary(msets) object
+#' @param sep the field separator of the class
 #'
 #' @return a 'data.frame' with the frequences
 #'
 #' @export
 #'
-computeSupertestFrequencies <- function(elementsIntersections) {
+computeSupertestFrequencies <- function(elementsIntersections, sep=".") {
   frequencies <- c()
   fathers <- c()
   intersectionClass<-c()
@@ -86,7 +87,7 @@ computeSupertestFrequencies <- function(elementsIntersections) {
   for(i in seq_along(elementsIntersections)){
     class<-elementsIntersections[[i]]
     subClasses <- unlist(strsplit(class,", "))
-    spClasses <-unlist(lapply(subClasses, function(subClass) strsplit(subClass,"-")[[1]][1]))
+    spClasses <-unlist(lapply(subClasses, function(subClass) strsplit(subClass,sep,fixed = T)[[1]][1]))
     spClasses <- gsub("^ ", "",spClasses)
     frequencies<-c(frequencies,table(spClasses))
     fathers<-c(fathers,names(table(spClasses)))
