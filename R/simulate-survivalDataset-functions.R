@@ -1,15 +1,37 @@
+#' Filter direct edges
+#'
+#' Filter all directed edges
+#'
+#' @param graph a Pathway graph from graphite
+#' @param reverse invert selection
+#'
+#' @return a Pathway with selected edges
+#'
+#' @importFrom checkmate assertClass
+#' @importFrom graphite edges buildPathway
+#'
+#' @export
 filterDirected <- function(graph, reverse=FALSE) {
-  ed <- graphite::edges(graph)
-  pss <- ed$direction
-  sel <- pss == "directed"
+  checkmate::assertClass(graph, "Pathway")
+  eds <- list(
+    proteins=graphite::edges(graph, "proteins", stringsAsFactors=FALSE),
+    matabolites=graphite::edges(graph, "metabolites", stringsAsFactors=FALSE),
+    mixed=graphite::edges(graph, "mixed", stringsAsFactors=FALSE)
+  )
+  newEds <- lapply(eds, function(ed){
+    pss <- ed$direction
+    sel <- pss == "directed"
+    if (reverse)
+      sel <- !sel
 
-  if (reverse)
-    sel <- !sel
+    data.frame(src_type=ed$src_type[sel], src=ed$src[sel],
+               dest_type=ed$dest_type[sel], dest=ed$dest[sel],
+               direction=ed$direction[sel], type=ed$type[sel],
+               stringsAsFactors = FALSE)
+  })
 
-  newEdges <- data.frame(src=ed$src[sel], dest=ed$dest[sel],
-                         direction=ed$direction[sel], type=ed$type[sel])
-
-  buildPathway(graph@id,graph@title,newEdges,graph@species,graph@database, graph@identifier)
+  graphite::buildPathway(graph@id,graph@title,graph@species, graph@database,
+               proteinEdges=newEds$proteins, metaboliteEdges = newEds$matabolites, mixedEdges = newEds$mixed)
 }
 
 #' Simulate Survival Data
@@ -56,13 +78,21 @@ simulateData <- function(beta, patientNum=300, fUpTime=1000, seed=1234) {
 #'
 #' @inheritParams all_shortest_paths return
 #'
-#' @importFrom igraph all_shortest_paths
-#' @importFrom checkmate assertClass
+#' @examples
+#'   if (require(graphite)) {
+#'     p <- pathways("hsapiens", "kegg")[["Cell cycle"]]
+#'     createPath(p, "ENTREZID:25", "ENTREZID:7029")
+#'   }
 #'
+#' @importFrom igraph all_shortest_paths graph.data.frame
+#' @importFrom checkmate assertClass
 #' @export
 createPath <- function(graph, start, end, mode="out") {
-  assertClass(graph, "Pathway")
-  g <- graph.data.frame(graph@edges, directed=T, vertices=graphite::nodes(graph))
+  checkmate::assertClass(graph, "Pathway")
+  eds <- rbind(graph@protEdges, graph@metabolEdges, graph@mixedEdges)
+  eds <- data.frame(src=paste(eds$src_type,eds$src, sep=":"),
+                    dest=paste(eds$dest_type,eds$dest, sep=":"), stringsAsFactors = F)
+  g <- graph.data.frame(eds, directed=T, vertices=graphite::nodes(graph, "mixed"))
   igraph::all_shortest_paths(g, start, end, mode=mode)$res
 }
 
@@ -100,6 +130,7 @@ fromChain2edgeList <- function(chain) {
 #'   \item{mu1}{mu1}
 #'   \item{mu2}{mu2}
 #'
+#' @importFrom stats runif
 #' @export
 computeSimPATHyParameters <- function(chain, nodes, deInChain=NULL, deInPath=NULL, augmentedMu=2, strong=FALSE) {
 
@@ -158,6 +189,8 @@ computeSimPATHyParameters <- function(chain, nodes, deInChain=NULL, deInPath=NUL
 #'
 #' @importFrom checkmate assertClass
 #' @importFrom graphite pathwayGraph
+#' @importFrom graph nodes
+#' @importFrom simPATHy simPATHy
 #'
 #' @export
 #'
@@ -177,9 +210,9 @@ makeTheDataset <- function(pathway, pathBoundaries, deInChain, deInPath, w, ann,
 
   allPaths <- unique(do.call(rbind,lapply(path,function(x) {names(x)})))
   selectP <- allPaths[w,]
-  nd = nodes(graph)
+  nd = graph::nodes(graph)
 
-  argList <- computeSimPATHyParameters(selectP, nodes(graph), deInChain=deInChain, deInPath=deInPath, augmentedMu, strong=strong)
+  argList <- computeSimPATHyParameters(selectP, graph::nodes(graph), deInChain=deInChain, deInPath=deInPath, augmentedMu, strong=strong)
 
   n1 = sum(ann$x==1)
   n2 = sum(ann$x==0)
@@ -218,6 +251,8 @@ makeTheDataset <- function(pathway, pathBoundaries, deInChain, deInPath, w, ann,
 #'
 #' @importFrom graphite pathwayGraph
 #' @importFrom checkmate assertClass
+#' @importFrom simPATHy simPATHy
+#' @export
 makeUniformDataset <- function(pathway, ann){
   ## p <- c("EGFR tyrosine kinase inhibitor resistance")
 

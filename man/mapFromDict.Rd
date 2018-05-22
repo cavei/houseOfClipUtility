@@ -9,11 +9,14 @@ mapFromDict(keys, dict)
 \arguments{
 \item{keys}{a vector of cluster Ids}
 
-\item{dict}{a list with keys to values}
+\item{dict}{a vector with keys (names) to values}
 }
 \value{
 a list with value to keys
 }
 \description{
 For internal use only.
+}
+\examples{
+mapFromDict("a", c(a = "5"))
 }

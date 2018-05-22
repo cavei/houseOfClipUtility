@@ -5,9 +5,10 @@ Version: 0.1.0
 Author: Paolo Martini
 Maintainer: Paolo Martini <paolo.cavei@gmail.com>
 Description: Ensemble of different functions that are meant to be used for clip legacy R packages.
-Imports: ggplot2, corpcor, elasticnet, FactoMineR, qpgraph, graphite, checkmate, RColorBrewer, SuperExactTest, igraph, AnnotationDbi, gRbase, graph, methods, survsim
+Imports: ggplot2, corpcor, elasticnet, FactoMineR, qpgraph, graphite, checkmate, RColorBrewer,
+    SuperExactTest, igraph, AnnotationDbi, gRbase, graph, methods, survsim, mvtnorm, simPATHy
 Depends: 
-Suggests: org.Hs.eg.db
+Suggests: org.Hs.eg.db, testthat
 License: AGPL-3
 Encoding: UTF-8
 LazyData: true

@@ -18,3 +18,10 @@ createPath(graph, start, end, mode = "out")
 \description{
 Create a path from pathway
 }
+\examples{
+  if (require(graphite)) {
+    p <- pathways("hsapiens", "kegg")[["Cell cycle"]]
+    createPath(p, "ENTREZID:25", "ENTREZID:7029")
+  }
+
+}
