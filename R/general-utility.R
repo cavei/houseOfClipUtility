@@ -62,34 +62,38 @@ mapFromDict <- function(keys, dict) {
   unlist(dict[keys])
 }
 
-#' Create fake expression
+#' Create fake expression based on variance
 #'
-#' @param component_x the number of component in x
-#' @param component_y the number of component in y
-#' @param dimension the final dimension of the expression matrix
+#' @param n the number of element (a.k.a. genes)
+#' @param nfeatures the number of features (a.k.a. samples)
 #'
 #' @return dummy expression matrix
 #'
-#' @examples randomExpression()
+#' @examples randomExpression(4)
 #' @importFrom mvtnorm rmvnorm
 #' @importFrom stats rnorm
 #' @export
-randomExpression <- function(component_x=2, component_y=2, dimension=c(10,20)) {
+randomExpression <- function(n, nfeatures=10) {
   set.seed(1234)
-  if (component_x > dimension[1] | component_x > 20)
-    stop("Too much component_x")
-  if (component_y > dimension[2] | component_y > 5)
-    stop("Too much component_y")
-  if (any(dimension<1))
-    stop("both dimension must be positive")
+  sigma <- matrix(rnorm(n^2), ncol=n)
+  sigma[upper.tri(sigma)] <- t(sigma)[upper.tri(sigma)]
+  diag(sigma) <- rev(seq_len(n))
+  sigma <- makePositiveDefinite(sigma)$m1
+  mvtnorm::rmvnorm(n = nfeatures, mean=seq_len(n), sigma = sigma)
+}
 
-  means <- sample(1:20, component_x)
-  features <- seq_len(dimension[1])
-  setsLength <- sapply(split(features, features%%component_x), length)
-  means <- rep(means, times=setsLength)
-
-  vars <- abs(rnorm(component_y*2, mean = 2, sd = 1))
-  n = dimension[1]*dimension[2]
-  noise <- matrix(sample(vars,n, replace=T), ncol=dimension[1])
-  exprs <- t(mvtnorm::rmvnorm(dimension[2], mean=means)*noise)
+#' Forse random nodes degress to be even
+#'
+#' @param degrees the nodes degrees, a named vector
+#'
+#' @return even nodes degrees
+#'
+#' @export
+#'
+makeDegreesEven <- function(degrees) {
+  if (sum(degrees)%%2 == 0)
+    return(degrees)
+  idx <- sample(seq_len(degrees),1)
+  degrees[idx] + 1
+  degrees
 }

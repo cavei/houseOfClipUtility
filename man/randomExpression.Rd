@@ -2,23 +2,21 @@
 % Please edit documentation in R/general-utility.R
 \name{randomExpression}
 \alias{randomExpression}
-\title{Create fake expression}
+\title{Create fake expression based on variance}
 \usage{
-randomExpression(component_x = 2, component_y = 2, dimension = c(10, 20))
+randomExpression(n, nfeatures = 10)
 }
 \arguments{
-\item{component_x}{the number of component in x}
+\item{n}{the number of element (a.k.a. genes)}
 
-\item{component_y}{the number of component in y}
-
-\item{dimension}{the final dimension of the expression matrix}
+\item{nfeatures}{the number of features (a.k.a. samples)}
 }
 \value{
 dummy expression matrix
 }
 \description{
-Create fake expression
+Create fake expression based on variance
 }
 \examples{
-randomExpression()
+randomExpression(4)
 }
