@@ -189,7 +189,7 @@ computeSimPATHyParameters <- function(chain, nodes, deInChain=NULL, deInPath=NUL
 #'
 #' @importFrom checkmate assertClass
 #' @importFrom graphite pathwayGraph
-#' @importFrom graph nodes
+#' @importFrom graph nodes randomNodeGraph
 #' @importFrom simPATHy simPATHy
 #'
 #' @export
