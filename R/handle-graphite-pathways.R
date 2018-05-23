@@ -7,6 +7,11 @@
 #'
 #' @return a data frame, id and pathway name
 #'
+#' @examples
+#'   if (require(graphite)){
+#'     pathways <- pathways("hsapiens", "kegg")
+#'     mapPathwaysIDfromGraphite(pathways, names(pathways)[1:10])
+#'   }
 #' @importFrom checkmate assertClass
 #'
 #' @export
