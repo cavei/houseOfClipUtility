@@ -1,3 +1,18 @@
+#' Make positive and definite covariance matrix
+#'
+#' @param m1 matrix 1
+#' @param m2 matrix 2
+#' @param m3 matrix 3
+#' @param threshold threshold of difference
+#'
+#' @return list with
+#'   \item{m1}{the matrix m1 positive and definite}
+#'   \item{m2}{the matrix m2 positive and definite}
+#'   \item{m3}{the matrix m3 positive and definite}
+#'   \item{correction}{the magneturde of the correction}
+#'   \item{value}{the value}
+#'
+#' @export
 makePositiveDefinite<-function(m1, m2=NULL, m3=NULL, threshold=0.1){
 
   if(is.null(m2) & is.null(m3)) {
