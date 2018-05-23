@@ -16,16 +16,21 @@
 #'   \item{sdev}{the standard deviation captured by the PCs}
 #'   \item{loadings}{the loadings}
 #'
+#' @examples
+#'   fakeExp <- randomExpression(4)
+#'   computePCs(t(fakeExp))
+#'
 #' @importFrom FactoMineR estim_ncp
+#'
 #' @export
 #'
-computePCs <- function(exp, shrink, method=c("regular", "topological", "sparse"),
-                       cliques=NULL, maxPCs) {
+computePCs <- function(exp, shrink=FALSE, method=c("regular", "topological", "sparse"),
+                       cliques=NULL, maxPCs=3) {
   k<- min(FactoMineR::estim_ncp(exp,scale=FALSE,ncp.min=1)$ncp, maxPCs)
-  switch(method,
-         regular     = compPCs(exp=exp, shrink=shrink, k=k),
-         topological = topoCompPCs(exp=exp, shrink=shrink, cliques=cliques, k=k),
-         sparse      = sparseCompPCs(exp=exp, shrink=shrink, k=k))
+  switch(method[1],
+         "regular"     = compPCs(exp=exp, shrink=shrink, k=k),
+         "topological" = topoCompPCs(exp=exp, shrink=shrink, cliques=cliques, k=k),
+         "sparse"      = sparseCompPCs(exp=exp, shrink=shrink, k=k))
 }
 
 #' Topological PCA
