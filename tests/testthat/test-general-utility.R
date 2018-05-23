@@ -18,6 +18,6 @@ test_that("reverseDict", {
 })
 
 test_that("randomExpression", {
-  expect_equal(ncol(randomExpression()),20)
+  expect_equal(dim(randomExpression(4,10)),c(10,4))
 })
 
