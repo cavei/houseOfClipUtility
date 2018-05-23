@@ -7,8 +7,8 @@
 \alias{compPCs}
 \title{compute PCs.}
 \usage{
-computePCs(exp, shrink, method = c("regular", "topological", "sparse"),
-  cliques = NULL, maxPCs)
+computePCs(exp, shrink = FALSE, method = c("regular", "topological",
+  "sparse"), cliques = NULL, maxPCs = 3)
 
 topoCompPCs(exp, shrink, cliques, k)
 
@@ -64,4 +64,9 @@ Three methods are implemented:
   * regular: a regular PCA ('prcomp')
   * topological: PCA using a pathway topology.
   * sparse: sparse PCA analysis implemented by 'elasticnet'
+}
+\examples{
+  fakeExp <- randomExpression(4)
+  computePCs(t(fakeExp))
+
 }
