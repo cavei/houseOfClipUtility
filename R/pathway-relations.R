@@ -1,3 +1,22 @@
+#' Download Reactome Pathway Relations
+#'
+#' @param url the location of the file. Can be local.
+#' @param speciesAbbr species acronim
+#'
+#' @return a data frame
+#' @importFrom utils read.table
+#' @export
+downloadPathwayRelationFromReactome <- function(
+  url="https://reactome.org/download/current/ReactomePathwaysRelation.txt",
+  speciesAbbr = "HSA") {
+
+  df <- read.table(url, sep="\t", header=F, quote="\"", stringsAsFactors = F, check.names = F)
+  colnames(df) <- c("parent", "child")
+  df <- df[grepl("HSA", df$parent) & grepl("HSA", df$child), , drop=F]
+  row.names(df) <- NULL
+  df
+}
+
 #' Retrieves pathways relatives
 #'
 #' For internal use only. Retrieves relatives given a pathway id.
