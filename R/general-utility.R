@@ -97,3 +97,33 @@ makeDegreesEven <- function(degrees) {
   degrees[idx] + 1
   degrees
 }
+
+#' Average a list of Matrices (cell wise)
+#'
+#' @param list a list of matrices of the same dims
+#' @param na.rm should NA be removed before mean.
+#'
+#' @return the average matrix
+#'
+#' @examples
+#' a <- matrix(1:6, 3,2)
+#' b <- matrix(1:6+3, 3,2)
+#' averageReplicateMatrices(list(a,b), na.rm=TRUE)
+#' a[1,1] <- NA
+#' averageReplicateMatrices(list(a,b), na.rm=TRUE)
+#'
+#' @export
+averageReplicateMatrices <- function(list, na.rm=FALSE) {
+  if (is.null(list))
+    return(NULL)
+  nperm=length(list)
+
+  if (length(list)==1)
+    return(list)
+  nrow=nrow(list[[1]])
+  ncol=ncol(list[[1]])
+  if (ncol == 0 | nrow==0)
+    stop("incorrect matrices dimension. Is your matrices empty?")
+  arr <- array( unlist(list) , c(nrow,ncol,nperm))
+  rowMeans( arr , 2, na.rm=na.rm)
+}
