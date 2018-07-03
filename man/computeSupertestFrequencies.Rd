@@ -2,9 +2,12 @@
 % Please edit documentation in R/superExactTest.R
 \name{computeSupertestFrequencies}
 \alias{computeSupertestFrequencies}
+\alias{computeFreqs}
 \title{Compute supertest frequences}
 \usage{
 computeSupertestFrequencies(elementsIntersections, sep = ".")
+
+computeFreqs(elementsIntersections)
 }
 \arguments{
 \item{elementsIntersections}{a summary(msets) object}
@@ -16,4 +19,6 @@ a 'data.frame' with the frequences
 }
 \description{
 For internal use only. Compute supertest frequences
+
+For internal use only. Compute  frequences
 }

@@ -12,7 +12,7 @@
 #' @importFrom graphics plot
 #' @export
 #'
-runSupertest <- function(list, universeSize, thr=0.05) {
+runSuperTest <- function(list, universeSize, thr=0.05) {
   echo <- "given a list the function produce the intersection amongst all the sets."
   tmp <- lapply(list, function(x) {
     namesAreNULL <- !is.null(names(x))
@@ -36,7 +36,7 @@ runSupertest <- function(list, universeSize, thr=0.05) {
 #' @importFrom SuperExactTest plot.msets
 #' @export
 #'
-plotSupertest <- function(mset) {
+plotSuperTest <- function(mset) {
   assertClass(mset, "msets")
 
   plot(mset, color.on="#409ec3",color.off="white",
@@ -47,14 +47,14 @@ plotSupertest <- function(mset) {
 #'
 #' For internal use only. Create a data.frame of TRUE/FALSE
 #'
-#' @inheritParams runSupertest list thr
+#' @inheritParams runSuperTest list thr
 #'
 #' @return a 'data.frame'. Each line a feature, columns are covariates: TRUE/FALSE significant
 #' @examples
 #' l <- list(a=c(0.03, 0.06, 1), b=c(0.6, 0.01, 0.5))
 #' createSignificanceMask(l)
 #'
-#' @rdname runSupertest
+#' @rdname runSuperTest
 #' @export
 #'
 createSignificanceMask <- function(list, thr=0.05) {
@@ -94,6 +94,24 @@ computeSupertestFrequencies <- function(elementsIntersections, sep=".") {
     intersectionClass<-c(intersectionClass,rep(names(elementsIntersections[i]),length(table(spClasses))))
   }
   data.frame(category=fathers, frequencies=frequencies, class=intersectionClass, stringsAsFactors = F)
+}
+
+#' Compute frequences in list
+#'
+#' For internal use only. Compute  frequences
+#'
+#' @inheritParams computeSupertestFrequencies
+#'
+#' @rdname computeSupertestFrequencies
+#'
+#' @export
+#'
+computeFreqs <- function(elementsIntersections) {
+  freques <- lapply(names(elementsIntersections), function(x) {
+    counts <- table(elementsIntersections[[x]])
+    data.frame(category=names(counts), frequencies=as.numeric(counts), class=x, stringsAsFactors = F)
+  })
+  do.call(rbind, freques)
 }
 
 #' Plot supertest frequences
