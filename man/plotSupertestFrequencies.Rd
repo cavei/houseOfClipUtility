@@ -4,10 +4,12 @@
 \alias{plotSupertestFrequencies}
 \title{Plot supertest frequences}
 \usage{
-plotSupertestFrequencies(supertestFreq)
+plotSupertestFrequencies(supertestFreq, manualColors = NULL)
 }
 \arguments{
 \item{supertestFreq}{a data.frame created from 'computeSupertestFrequencies'}
+
+\item{manualColors}{optional vector of colors}
 }
 \description{
 For internal use only. Plot supertest frequences

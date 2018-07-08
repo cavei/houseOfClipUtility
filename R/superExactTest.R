@@ -119,6 +119,7 @@ computeFreqs <- function(elementsIntersections) {
 #' For internal use only. Plot supertest frequences
 #'
 #' @param supertestFreq a data.frame created from 'computeSupertestFrequencies'
+#' @param manualColors optional vector of colors
 #'
 #' @return NULL
 #'
@@ -126,17 +127,26 @@ computeFreqs <- function(elementsIntersections) {
 #' @importFrom stats reorder
 #' @export
 #'
-plotSupertestFrequencies <- function(supertestFreq){
+plotSupertestFrequencies <- function(supertestFreq, manualColors=NULL){
   if (!all(colnames(supertestFreq) %in% c("category", "frequencies", "class")))
     stop("supertestFreq dataframe must contain columns category, frequencies and class")
-  ggplot2::ggplot(supertestFreq, aes(y = frequencies, x = suppressWarnings(stats::reorder(category, class)), group = class, colour = class)) +
-  ggplot2::coord_polar() +
-  ggplot2::geom_point(stat='identity') +
-  ggplot2::geom_polygon(fill=NA)+
-  ggplot2::geom_path() +
-  ggplot2::theme(axis.text.x=element_text(size=3, angle=45))+
-  ggplot2::labs(x = NULL)+
-  ggplot2::theme_bw()
+  if (!is.null(manualColors)) {
+    g <- ggplot2::ggplot(supertestFreq, aes(y = frequencies,
+                                            x = suppressWarnings(stats::reorder(category, class)),
+                                            group = class, colour=class))
+    g <- g + ggplot2::scale_colour_manual(values=manualColors)
+  } else {
+    g <- ggplot2::ggplot(supertestFreq, aes(y = frequencies,
+                                       x = suppressWarnings(stats::reorder(category, class)),
+                                       group = class, colour = class))
+  }
+  g + ggplot2::coord_polar() +
+    ggplot2::geom_point(stat='identity') +
+    ggplot2::geom_polygon(fill=NA)+
+    ggplot2::geom_path() +
+    ggplot2::theme(axis.text.x=element_text(size=3, angle=45)) +
+    ggplot2::labs(x = NULL) +
+    ggplot2::theme_bw()
 }
 
 #' Minimum or NA
