@@ -4,13 +4,27 @@
 \alias{plotSupertestFrequencies}
 \title{Plot supertest frequences}
 \usage{
-plotSupertestFrequencies(supertestFreq, manualColors = NULL)
+plotSupertestFrequencies(supertestFreq, manualColors = NULL, minSize = 4,
+  maxSize = 20, width = 20)
 }
 \arguments{
 \item{supertestFreq}{a data.frame created from 'computeSupertestFrequencies'}
 
 \item{manualColors}{optional vector of colors}
+
+\item{minSize}{the minimal fontsize. Maximal frequencies will be added for each class}
+
+\item{maxSize}{the maximal fontsize dimension, all values above are clipped}
+
+\item{width}{the numerbe of character to wrap the labels}
 }
 \description{
 For internal use only. Plot supertest frequences
+}
+\examples{
+df <- data.frame(category=c("talk", "too","mutch", "dear"),
+  frequencies=c(1,2,1,3),
+  class=rep("Mut",4), stringsAsFactors = FALSE)
+plotSupertestFrequencies(df)
+
 }

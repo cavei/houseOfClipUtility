@@ -120,33 +120,48 @@ computeFreqs <- function(elementsIntersections) {
 #'
 #' @param supertestFreq a data.frame created from 'computeSupertestFrequencies'
 #' @param manualColors optional vector of colors
+#' @param minSize the minimal fontsize. Maximal frequencies will be added for each class
+#' @param maxSize the maximal fontsize dimension, all values above are clipped
+#' @param width the numerbe of character to wrap the labels
 #'
 #' @return NULL
+#' @examples
+#' df <- data.frame(category=c("talk", "too","mutch", "dear"),
+#'   frequencies=c(1,2,1,3),
+#'   class=rep("Mut",4), stringsAsFactors = FALSE)
+#' plotSupertestFrequencies(df)
 #'
-#' @importFrom ggplot2 ggplot aes element_text coord_polar geom_point geom_polygon geom_path theme theme_bw labs
+#' @importFrom ggplot2 ggplot aes element_text coord_polar geom_point geom_polygon geom_path theme theme_bw labs element_blank
 #' @importFrom stats reorder
 #' @export
 #'
-plotSupertestFrequencies <- function(supertestFreq, manualColors=NULL){
+plotSupertestFrequencies <- function(supertestFreq, manualColors=NULL, minSize=4, maxSize=20, width=20){
   if (!all(colnames(supertestFreq) %in% c("category", "frequencies", "class")))
     stop("supertestFreq dataframe must contain columns category, frequencies and class")
   if (!is.null(manualColors)) {
     g <- ggplot2::ggplot(supertestFreq, aes(y = frequencies,
-                                            x = suppressWarnings(stats::reorder(category, class)),
+                                            # x = suppressWarnings(stats::reorder(category, class)),
+                                            x = factor(category),
                                             group = class, colour=class))
     g <- g + ggplot2::scale_colour_manual(values=manualColors)
   } else {
     g <- ggplot2::ggplot(supertestFreq, aes(y = frequencies,
-                                       x = suppressWarnings(stats::reorder(category, class)),
+                                       # x = suppressWarnings(stats::reorder(category, class)),
+                                       x = factor(category),
                                        group = class, colour = class))
   }
+  size <- tapply(seq_along(supertestFreq$frequencies), factor(supertestFreq$category), function(idx) max(supertestFreq$frequencies[idx]))
+  size <- as.numeric(size)+minSize
+  size[size > maxSize] <- maxSize
   g + ggplot2::coord_polar() +
     ggplot2::geom_point(stat='identity') +
     ggplot2::geom_polygon(fill=NA)+
     ggplot2::geom_path() +
-    ggplot2::theme(axis.text.x=element_text(size=3, angle=45)) +
     ggplot2::labs(x = NULL) +
-    ggplot2::theme_bw()
+    ggplot2::theme_bw() +
+    ggplot2::theme(panel.border = element_blank(), axis.line.x = element_blank(), axis.line.y = element_blank()) +
+    ggplot2::theme(axis.text.x=element_text(size=size)) +
+    ggplot2::scale_x_discrete(labels=function(x) lapply(strwrap(x, width = width, simplify = FALSE), paste, collapse="\n"))
 }
 
 #' Minimum or NA
