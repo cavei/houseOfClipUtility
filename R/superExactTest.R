@@ -131,7 +131,9 @@ computeFreqs <- function(elementsIntersections) {
 #'   class=rep("Mut",4), stringsAsFactors = FALSE)
 #' plotSupertestFrequencies(df)
 #'
-#' @importFrom ggplot2 ggplot aes element_text coord_polar geom_point geom_polygon geom_path theme theme_bw labs element_blank
+#' @importFrom ggplot2 ggplot aes element_text coord_polar geom_point
+#'   geom_polygon geom_path theme theme_bw labs element_blank ggplot_gtable ggplot_build
+#' @importFrom grid grid.draw grid.newpage
 #' @importFrom stats reorder
 #' @export
 #'
@@ -153,7 +155,7 @@ plotSupertestFrequencies <- function(supertestFreq, manualColors=NULL, minSize=4
   size <- tapply(seq_along(supertestFreq$frequencies), factor(supertestFreq$category), function(idx) max(supertestFreq$frequencies[idx]))
   size <- as.numeric(size)+minSize
   size[size > maxSize] <- maxSize
-  g + ggplot2::coord_polar() +
+  g <- g + ggplot2::coord_polar() +
     ggplot2::geom_point(stat='identity') +
     ggplot2::geom_polygon(fill=NA)+
     ggplot2::geom_path() +
@@ -162,6 +164,11 @@ plotSupertestFrequencies <- function(supertestFreq, manualColors=NULL, minSize=4
     ggplot2::theme(panel.border = element_blank(), axis.line.x = element_blank(), axis.line.y = element_blank()) +
     ggplot2::theme(axis.text.x=element_text(size=size)) +
     ggplot2::scale_x_discrete(labels=function(x) lapply(strwrap(x, width = width, simplify = FALSE), paste, collapse="\n"))
+  g <- g + theme(legend.position = c(1,1), legend.justification=c(0, 1))
+  grid::grid.newpage()
+  gt <- ggplot2::ggplot_gtable(ggplot2::ggplot_build(g))
+  gt$layout$clip <- "off"
+  grid::grid.draw(gt)
 }
 
 #' Minimum or NA
