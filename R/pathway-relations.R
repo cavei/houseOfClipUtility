@@ -12,7 +12,7 @@ downloadPathwayRelationFromReactome <- function(
 
   df <- read.table(url, sep="\t", header=F, quote="\"", stringsAsFactors = F, check.names = F)
   colnames(df) <- c("parent", "child")
-  df <- df[grepl("HSA", df$parent) & grepl("HSA", df$child), , drop=F]
+  df <- df[grepl(speciesAbbr, df$parent) & grepl(speciesAbbr, df$child), , drop=F]
   row.names(df) <- NULL
   df
 }
