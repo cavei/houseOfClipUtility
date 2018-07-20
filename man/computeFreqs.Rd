@@ -7,11 +7,11 @@
 computeFreqs(elementsIntersections)
 }
 \arguments{
-\item{elementsIntersections}{a summary(msets) object}
+\item{elementsIntersections}{a names list}
 }
 \value{
 a 'data.frame' with the frequences
 }
 \description{
-For internal use only. Compute supertest frequences
+For internal use only. Compute frequences
 }

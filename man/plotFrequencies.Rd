@@ -2,10 +2,11 @@
 % Please edit documentation in R/superExactTest.R
 \name{plotFrequencies}
 \alias{plotFrequencies}
-\title{Plot supertest frequences}
+\title{Plot frequences}
 \usage{
 plotFrequencies(frequencies, manualColors = NULL, minSize = 4,
-  maxSize = 20, width = 20, relMagnificationOfLegend = 0.5)
+  maxSize = 20, width = 20, relMagnificationOfLegend = 0.5,
+  lineSize = 1)
 }
 \arguments{
 \item{frequencies}{a data.frame created from 'computeFreqs'}
@@ -19,6 +20,8 @@ plotFrequencies(frequencies, manualColors = NULL, minSize = 4,
 \item{width}{the numerbe of character to wrap the labels}
 
 \item{relMagnificationOfLegend}{the relative magnification of the text of the legend}
+
+\item{lineSize}{the thickness of the lines}
 }
 \description{
 For internal use only. Plot supertest frequences

@@ -16,7 +16,7 @@ computeFreqs <- function(elementsIntersections) {
   do.call(rbind, freques)
 }
 
-#' Plot supertest frequences
+#' Plot frequences
 #'
 #' For internal use only. Plot supertest frequences
 #'
@@ -26,6 +26,7 @@ computeFreqs <- function(elementsIntersections) {
 #' @param maxSize the maximal fontsize dimension, all values above are clipped
 #' @param width the numerbe of character to wrap the labels
 #' @param relMagnificationOfLegend the relative magnification of the text of the legend
+#' @param lineSize the thickness of the lines
 #'
 #' @return NULL
 #' @examples
@@ -35,13 +36,14 @@ computeFreqs <- function(elementsIntersections) {
 #' plotFrequencies(df)
 #'
 #' @importFrom ggplot2 ggplot aes element_text coord_polar geom_point
-#'   geom_polygon geom_path theme theme_bw labs element_blank ggplot_gtable ggplot_build rel
+#'   geom_polygon geom_path theme theme_bw labs element_blank
+#'   ggplot_gtable ggplot_build rel element_line
 #' @importFrom grid grid.draw grid.newpage
 #' @importFrom stats reorder
 #' @export
 #'
 plotFrequencies <- function(frequencies, manualColors=NULL, minSize=4,
-                            maxSize=20, width=20, relMagnificationOfLegend=0.5){
+                            maxSize=20, width=20, relMagnificationOfLegend=0.5, lineSize=1){
   if (!all(colnames(frequencies) %in% c("category", "frequencies", "class")))
     stop("Frequences dataframe must contain columns category, frequencies and class")
   if (!is.null(manualColors)) {
@@ -60,11 +62,12 @@ plotFrequencies <- function(frequencies, manualColors=NULL, minSize=4,
   g <- g + ggplot2::coord_polar() +
     ggplot2::geom_point(stat='identity') +
     ggplot2::geom_polygon(fill=NA)+
-    ggplot2::geom_path() +
+    ggplot2::geom_path(size=lineSize) +
     ggplot2::labs(x = NULL) +
     ggplot2::theme_bw() +
     ggplot2::theme(panel.border = element_blank(), axis.line.x = element_blank(), axis.line.y = element_blank()) +
-    ggplot2::theme(axis.text.x=element_text(size=size)) +
+    ggplot2::theme(panel.grid=ggplot2::element_line(size = lineSize*0.5),
+                   axis.text.x=element_text(size=size)) +
     ggplot2::scale_x_discrete(labels=function(x) lapply(strwrap(x, width = width, simplify = FALSE), paste, collapse="\n"))
   g <- g + theme(legend.position = c(1,1), legend.justification=c(0, 1),
                  legend.text=element_text(size=ggplot2::rel(relMagnificationOfLegend)))
