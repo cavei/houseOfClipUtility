@@ -63,19 +63,7 @@ a list with the following elements:
   \item{loadings}{the loadings}
 }
 \description{
-Topological PCA
-
-Sparse PCA
-
-Regular PCA
-
 For internal use only. Performs Principal Componenent analysis.
-
-Topological PCA
-
-Sparse PCA
-
-Regular PCA
 }
 \details{
 Three methods are implemented:

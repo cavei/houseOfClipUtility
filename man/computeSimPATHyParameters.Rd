@@ -4,8 +4,8 @@
 \alias{computeSimPATHyParameters}
 \title{Compute SimPATHy Parameters}
 \usage{
-computeSimPATHyParameters(chain, nodes, deInChain = NULL, deInPath = NULL,
-  augmentedMu = 2, strong = FALSE)
+computeSimPATHyParameters(chain, nodes, deInChain = NULL,
+  deInPath = NULL, augmentedMu = 2, strong = FALSE)
 }
 \arguments{
 \item{chain}{a chain o disregulation}
