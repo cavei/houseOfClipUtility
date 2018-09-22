@@ -19,11 +19,18 @@ mergeGraphitePathways <- function(pathways, id="path1", title="path1", species="
 
   protEdges <- unique(do.call(rbind, lapply(pathways, function(p) p@protEdges)))
   row.names(protEdges)<-NULL
+  protPropEdges <- unique(do.call(rbind, lapply(pathways, function(p) p@protPropEdges)))
+  row.names(protPropEdges)<-NULL
   metabolEdges<- unique(do.call(rbind, lapply(pathways, function(p) p@metabolEdges)))
   row.names(metabolEdges) <- NULL
+  metabolPropEdges<- unique(do.call(rbind, lapply(pathways, function(p) p@metabolPropEdges)))
+  row.names(metabolPropEdges) <- NULL
   mixedEdges <- unique(do.call(rbind, lapply(pathways, function(p) p@mixedEdges)))
   row.names(mixedEdges) <- NULL
-  graphite::buildPathway(id, title, species, database, protEdges, metabolEdges, mixedEdges, timestamp)
+  customPath <- graphite::buildPathway(id, title, species, database, protEdges, metabolEdges, mixedEdges, timestamp)
+  customPath@metabolPropEdges <- metabolPropEdges
+  customPath@protPropEdges <- protPropEdges
+  customPath
 }
 
 #' Subset of a graphite Pathway
@@ -43,9 +50,14 @@ subPathway <- function(ids, pathway, and=TRUE) {
   protEdges <- makeSubset(ids, pathway@protEdges, and)
   metabolEdges <- makeSubset(ids, pathway@metabolEdges, and)
   mixedEdges <- makeSubset(ids, pathway@mixedEdges, and)
-  graphite::buildPathway(pathway@id, pathway@title, pathway@species,
+  protPropEdges <- makeSubset(ids, pathway@protPropEdges, and)
+  metabolPropEdges <- makeSubset(ids, pathway@metabolPropEdges, and)
+  customPath <- graphite::buildPathway(pathway@id, pathway@title, pathway@species,
                          pathway@database, protEdges, metabolEdges,
                          mixedEdges, Sys.Date())
+  customPath@metabolPropEdges <- metabolPropEdges
+  customPath@protPropEdges <- protPropEdges
+  customPath
 }
 
 makeSubset <- function(ids, edgeDF, and=TRUE) {
