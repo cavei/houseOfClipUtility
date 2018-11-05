@@ -18,6 +18,10 @@ filterDirected <- function(graph, reverse=FALSE) {
     matabolites=graphite::edges(graph, "metabolites", stringsAsFactors=FALSE),
     mixed=graphite::edges(graph, "mixed", stringsAsFactors=FALSE)
   )
+
+  eds$protPropEdges <- graph@protPropEdges
+  eds$metabolPropEdges <- graph@metabolPropEdges
+
   newEds <- lapply(eds, function(ed){
     pss <- ed$direction
     sel <- pss == "directed"
@@ -30,25 +34,27 @@ filterDirected <- function(graph, reverse=FALSE) {
                stringsAsFactors = FALSE)
   })
 
-  graphite::buildPathway(graph@id,graph@title,graph@species, graph@database,
+  customPath <- graphite::buildPathway(graph@id,graph@title,graph@species, graph@database,
                proteinEdges=newEds$proteins, metaboliteEdges = newEds$matabolites, mixedEdges = newEds$mixed)
+  customPath@metabolPropEdges <- newEds$metabolPropEdges
+  customPath@protPropEdges <- newEds$protPropEdges
+  customPath
 }
 
 #' Simulate Survival Data
 #'
 #' Create survival censored data annotations
 #'
-#' @param beta the amount of effect of the covariate
+#' @param beta the beta values for covariates (see siple.surv.sim)
+#' @param x the x values for covariates (see siple.surv.sim)
 #' @param patientNum the number of patients to simulate
 #' @param fUpTime the length of the followup
 #' @param seed random seed setting
 #'
-#' @inheritParams simple.surv.sim return
-#'
 #' @importFrom survsim simple.surv.sim
 #'
 #' @export
-simulateData <- function(beta, patientNum=300, fUpTime=1000, seed=1234) {
+simulateData <- function(beta, x, patientNum=300, fUpTime=1000, seed=NULL) {
   ## argument beta: the effet of the covariate.
   dist.ev <- "weibull" # evento Weibull
   anc.ev <- 2.5
@@ -57,12 +63,17 @@ simulateData <- function(beta, patientNum=300, fUpTime=1000, seed=1234) {
   anc.cens <- 2.5
   beta0.cens <- 5.1
   z <-  list(c("unif", "0.98", "1")) # errore Uniform
-  x <- list(c("bern", 0.6)) # bernulli
+  # x <- list(c("bern", 0.6)) # bernulli
 
   if (!is.list(beta))
     beta = list(beta)
 
-  ## set.seed(seed)
+  if (length(beta) != length(x))
+    stop("invalid beta and x specification. Beta and x must be equal in length")
+
+  if (!is.null(seed))
+    set.seed(seed)
+
   survsim::simple.surv.sim(n=patientNum, foltime=fUpTime,
                   dist.ev=dist.ev, anc.ev=anc.ev, beta0.ev=beta0.ev,
                   dist.cen=dist.cens, anc.cens=anc.cens, beta0.cens=beta0.cens,

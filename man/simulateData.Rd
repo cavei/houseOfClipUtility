@@ -4,10 +4,12 @@
 \alias{simulateData}
 \title{Simulate Survival Data}
 \usage{
-simulateData(beta, patientNum = 300, fUpTime = 1000, seed = 1234)
+simulateData(beta, x, patientNum = 300, fUpTime = 1000, seed = NULL)
 }
 \arguments{
-\item{beta}{the amount of effect of the covariate}
+\item{beta}{the beta values for covariates (see siple.surv.sim)}
+
+\item{x}{the x values for covariates (see siple.surv.sim)}
 
 \item{patientNum}{the number of patients to simulate}
 
