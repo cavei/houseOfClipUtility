@@ -1,7 +1,7 @@
 Package: houseOfClipUtility
 Type: Package
 Title: Clip Legacy Functions
-Version: 0.1.1
+Version: 0.1.2
 Author: Paolo Martini
 Maintainer: Paolo Martini <paolo.cavei@gmail.com>
 Description: Ensemble of different functions that are meant to be used for clip legacy R packages.

@@ -127,3 +127,10 @@ averageReplicateMatrices <- function(list, na.rm=FALSE) {
   arr <- array( unlist(list) , c(nrow,ncol,nperm))
   rowMeans( arr , 2, na.rm=na.rm)
 }
+
+clip_value <- function(x, low=0, up=1) {
+  r = x
+  r[x<low] <- low
+  r[x>up] <- up
+  r
+}
