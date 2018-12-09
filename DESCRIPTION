@@ -1,15 +1,15 @@
 Package: houseOfClipUtility
 Type: Package
 Title: Clip Legacy Functions
-Version: 0.1.2
+Version: 0.1.3
 Author: Paolo Martini
 Maintainer: Paolo Martini <paolo.cavei@gmail.com>
 Description: Ensemble of different functions that are meant to be used for clip legacy R packages.
 Imports: ggplot2, corpcor, elasticnet, FactoMineR, qpgraph, graphite (>= 1.24), checkmate, RColorBrewer,
     SuperExactTest, igraph, AnnotationDbi, gRbase, graph, methods, survsim, mvtnorm, simPATHy
-Depends: 
+Depends: R (>= 3.5)
 Suggests: org.Hs.eg.db, testthat
 License: AGPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1

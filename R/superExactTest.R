@@ -44,6 +44,7 @@ computeFreqs <- function(elementsIntersections) {
 #'
 plotFrequencies <- function(frequencies, manualColors=NULL, minSize=4,
                             maxSize=20, width=20, relMagnificationOfLegend=0.5, lineSize=1){
+  category <- NULL
   if (!all(colnames(frequencies) %in% c("category", "frequencies", "class")))
     stop("Frequences dataframe must contain columns category, frequencies and class")
   if (!is.null(manualColors)) {

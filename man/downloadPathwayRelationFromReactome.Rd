@@ -4,12 +4,10 @@
 \alias{downloadPathwayRelationFromReactome}
 \title{Download Reactome Pathway Relations}
 \usage{
-
-  downloadPathwayRelationFromReactome(url = "https://reactome.org/download/current/ReactomePathwaysRelation.txt",
-  speciesAbbr = "HSA")
+downloadPathwayRelationFromReactome(url = NULL, speciesAbbr = "HSA")
 }
 \arguments{
-\item{url}{the location of the file. Can be local.}
+\item{url}{the location of the file. Can be local. If NULL pick the package reactome file.}
 
 \item{speciesAbbr}{species acronim}
 }
@@ -18,4 +16,10 @@ a data frame
 }
 \description{
 Download Reactome Pathway Relations
+}
+\examples{
+\dontrun{
+url = "https://reactome.org/download/current/ReactomePathwaysRelation.txt"
+downloadPathwayRelationFromReactome(url, speciesAbbr = "HSA")
+}
 }

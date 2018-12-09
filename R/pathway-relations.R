@@ -1,21 +1,43 @@
 #' Download Reactome Pathway Relations
 #'
-#' @param url the location of the file. Can be local.
+#' @param url the location of the file. Can be local. If NULL pick the package reactome file.
 #' @param speciesAbbr species acronim
 #'
 #' @return a data frame
-#' @importFrom utils read.table
+#' @importFrom utils read.table data
+#'
+#' @examples
+#' \dontrun{
+#' url = "https://reactome.org/download/current/ReactomePathwaysRelation.txt"
+#' downloadPathwayRelationFromReactome(url, speciesAbbr = "HSA")
+#' }
 #' @export
-downloadPathwayRelationFromReactome <- function(
-  url="https://reactome.org/download/current/ReactomePathwaysRelation.txt",
-  speciesAbbr = "HSA") {
-
+downloadPathwayRelationFromReactome <- function(url=NULL, speciesAbbr = "HSA") {
+  if (is.null(url)) {
+    url = system.file("extdata", "ReactomePathwaysRelation.txt", package = "houseOfClipUtility",
+                      mustWork = TRUE)
+    # ReactomePathwaysRelation <- NULL
+    # data(ReactomePathwaysRelation)
+    # df <- ReactomePathwaysRelation
+  }
   df <- read.table(url, sep="\t", header=F, quote="\"", stringsAsFactors = F, check.names = F)
   colnames(df) <- c("parent", "child")
   df <- df[grepl(speciesAbbr, df$parent) & grepl(speciesAbbr, df$child), , drop=F]
   row.names(df) <- NULL
   df
 }
+
+#' This is a copy of the file
+#' "https://reactome.org/download/current/ReactomePathwaysRelation.txt"
+#' downloaded Dec 2018.
+#'
+#' A brand new file can be downloaded using:
+#'  downloadPathwayRelationFromReactome
+#'
+#' @name ReactomePathwaysRelation
+#' @docType data
+#' @keywords data
+NULL
 
 #' Retrieves pathways relatives
 #'
