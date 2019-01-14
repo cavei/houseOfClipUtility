@@ -6,7 +6,7 @@
 \title{Simulate a mutation dataset with survival annotation}
 \usage{
 makeTheMutationDataset(pathway, impacted_genes, patients_fractions, ann,
-  omicName = "x", mutation_rate = 0.001)
+  omicName = "x", mutation_rate = 0.001, mut_cliques_genes = NULL)
 
 makeUniformMutationsDataset(pathway, ann, omicName = "x",
   mutation_rate = 0.001)
@@ -23,6 +23,8 @@ makeUniformMutationsDataset(pathway, ann, omicName = "x",
 \item{omicName}{the name of the omics to consider}
 
 \item{mutation_rate}{the basel mutation rate}
+
+\item{mut_cliques_genes}{genes that have low mutation rate}
 }
 \value{
 list

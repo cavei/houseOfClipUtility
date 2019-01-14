@@ -8,6 +8,7 @@
 #' @param ann survival annotations
 #' @param omicName the name of the omics to consider
 #' @param mutation_rate the basel mutation rate
+#' @param mut_cliques_genes genes that have low mutation rate
 #'
 #' @return list
 #'   \item{exprs}{expression}
@@ -22,7 +23,8 @@
 #' @rdname simulate_mutation_dataset
 #' @export
 #'
-makeTheMutationDataset <- function(pathway, impacted_genes, patients_fractions, ann, omicName="x", mutation_rate=0.001) {
+makeTheMutationDataset <- function(pathway, impacted_genes, patients_fractions, ann, omicName="x",
+                                   mutation_rate=0.001, mut_cliques_genes=NULL) {
   checkmate::assertClass(pathway, "Pathway")
 
   if (!(omicName %in% names(ann))) {
@@ -38,9 +40,16 @@ makeTheMutationDataset <- function(pathway, impacted_genes, patients_fractions, 
 
   mut <- create_random_uniform_mutatios(nd, n_patients, mutation_rate=mutation_rate, col_names=row.names(ann))
 
-  mut_binomial <- create_bimodal_mutations(ann[[omicName]], impacted_genes,
-                                           patients_fractions, mutation_rate=mutation_rate)
+  if (!is.null(mut_cliques_genes)) {
+    not_found_genes <- setdiff(mut_cliques_genes, nd)
+    if (length(not_found_genes) > 0 )
+      stop(paste0("some clique genes were not found: ", paste(not_found_genes, collapse = ", ")))
+    low_rate_mut <- create_random_uniform_mutatios(mut_cliques_genes, n_patients, mutation_rate=0.0005, col_names=row.names(ann))
+    mut[row.names(low_rate_mut), ] <- low_rate_mut
+  }
 
+  mut_binomial <- create_bimodal_mutations(ann[[omicName]], impacted_genes,
+                                           patients_fractions, mutation_rate=0.0005)
   mut[row.names(mut_binomial), ] <- mut_binomial
 
   if (!identical(colnames(mut), row.names(ann)))
